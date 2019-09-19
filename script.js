@@ -15,7 +15,11 @@ $(document).on("click", ".gif-button", function () {
             newDiv.addClass("card")
             newDiv.attr("style", "width: 18rem;");
             let newImg = $("<img>");
-            newImg.attr("src", response.data[i].images.fixed_height.url);
+            newImg.attr("src", response.data[i].images.fixed_height_still.url);
+            newImg.attr("still-link", response.data[i].images.fixed_height_still.url);
+            newImg.attr("animate-link", response.data[i].images.fixed_height.url);
+            newImg.attr("state", "static");
+            newImg.addClass("gif");
             newDiv.append(newImg);
             $("#images-here").prepend(newDiv);
         }
@@ -34,9 +38,20 @@ function makeButtons() {
 }
 makeButtons();
 
-$("#submit").on("click", function(event){
+$("#submit").on("click", function (event) {
     event.preventDefault();
     topics.push($("#search").val());
     $("#buttondiv").empty();
     makeButtons();
+});
+
+$(document).on("click", ".gif", function () {
+    if ($(this).attr("state") === "static") {
+        $(this).attr("src", $(this).attr("animate-link"));
+        $(this).attr("state", "animate");
+    }
+    else if ($(this).attr("state") === "animate") {
+        $(this).attr("src", $(this).attr("still-link"));
+        $(this).attr("state", "static");
+    }
 });
